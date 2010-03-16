@@ -19,22 +19,27 @@
 
   <modelVersion>4.0.0</modelVersion>
 
-  <parent>
+  <!--parent>
     <groupId>org.apache.camel</groupId>
     <artifactId>camel-parent</artifactId>
     <version>2.2.0</version>
+  </parent-->
+  <parent>
+        <groupId>pl.touk</groupId>
+        <artifactId>touk-superpom</artifactId>
+        <version>2.0.3</version>
   </parent>
-
+  <groupId>pl.touk.camel</groupId>
   <artifactId>camel-hise</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
-  <name>Camel :: HISE</name>         mc
+  <name>Camel :: HISE</name>
     
-  <description>Camel HISE support</description>*
+  <description>Camel HISE support</description>
 
   <properties>
 	<camel.osgi.export.pkg>org.apache.camel.component.hise.*</camel.osgi.export.pkg>
-	<!--camel.osgi.import.pkg>org.apache.camel.*;version:="2.0.0",*</camel.osgi.import.pkg-->
-  </properties>
+ </properties>
 
   <dependencies>
 
@@ -53,21 +58,25 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test</artifactId>
+      <version>2.2.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
+      <version>1.1.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
+      <version>1.2.15</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <version>4.5</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -82,6 +91,31 @@
           </excludes>
         </configuration>
       </plugin>
+      <!-- zalozenie jest takie, ze w koncu to gdzies wyjdzie na apache'a - wiec
+      na razie jest troche brudne -->
+      <plugin>
+      <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>2.0.1</version>
+          <extensions>true</extensions>
+          <configuration>
+            <instructions>
+              <Bundle-Name>${project.artifactId}</Bundle-Name>
+              <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+              <Export-Package>${camel.osgi.export};version=${project.version}</Export-Package>
+              <Import-Package>org.apache.camel.*;version="[2.0.0,3.0.0)",*</Import-Package>
+              <Implementation-Title>Apache Camel</Implementation-Title>
+              <Implementation-Version>${project.version}</Implementation-Version>
+          </instructions>
+        </configuration>
+    </plugin>
+    <plugin>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<configuration>
+		<source>1.5</source>
+		<target>1.5</target>
+	</configuration>
+    </plugin>        
     </plugins>
   </build>
 
