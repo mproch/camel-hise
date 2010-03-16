@@ -24,6 +24,8 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hise.api.HISEEngine;
 import org.apache.hise.api.Handler;
 import org.apache.hise.api.Sender;
@@ -39,6 +41,8 @@ import org.w3c.dom.Node;
  */
 public class HiseEndpoint extends DefaultEndpoint implements Sender, Handler {
 
+    private Log logger = LogFactory.getLog(HiseProducer.class);
+
     private TaskDefinition definition;
 
     private HISEEngine hiseEngine;
@@ -50,6 +54,7 @@ public class HiseEndpoint extends DefaultEndpoint implements Sender, Handler {
         this.definition = definition;
         this.hiseEngine = hiseEngine;
         registerTask();
+        logger.debug("created endpoint for "+endpointUri);
     }
 
     public Producer createProducer() throws Exception {
@@ -72,6 +77,7 @@ public class HiseEndpoint extends DefaultEndpoint implements Sender, Handler {
         if (consumer == null) {
             throw new RuntimeException("No consumer specified for "+definition.getTaskName());
         }
+        logger.debug("Sending "+node+" from hise task: "+getDefinition().getTaskName());
         return consumer.consume(node, node1);
     }
 

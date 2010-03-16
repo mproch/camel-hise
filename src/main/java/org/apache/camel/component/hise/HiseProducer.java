@@ -55,6 +55,7 @@ public class HiseProducer extends DefaultProducer {
 
         //TODO!
         Node createdBy = getEndpoint().getCamelContext().getTypeConverter().convertTo(Node.class, "<empty/>");
+        logger.debug("Sending "+body+" to hise task: "+hiseEndpoint.getDefinition().getTaskName());
         Node response =
                 hiseEndpoint.getHiseEngine().receive(hiseEndpoint, def.getPortType(), def.getOperation(), body, createdBy);
         exchange.getOut().setBody(response);
