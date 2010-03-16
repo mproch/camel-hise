@@ -39,7 +39,14 @@
 
   <properties>
 	<camel.osgi.export.pkg>org.apache.camel.component.hise.*</camel.osgi.export.pkg>
- </properties>
+  </properties>
+
+    <scm>
+      <connection>scm:git:ssh://beach/srv/git/camel-hise/</connection>
+      <developerConnection>scm:git:ssh://beach/srv/git/camel-hise/</developerConnection>
+      <url>git://beach/srv/git/camel-hise/</url>
+    </scm>
+    
 
   <dependencies>
 
