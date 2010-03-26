@@ -38,25 +38,33 @@ public class HiseProducer extends DefaultProducer {
 
     private Log logger = LogFactory.getLog(HiseProducer.class);
 
-    private HiseEndpoint hiseEndpoint;
+    //private HiseEndpoint hiseEndpoint;
 
     public HiseProducer(HiseEndpoint endpoint) {
         super(endpoint);
-        this.hiseEndpoint = endpoint;
+        
+        if (endpoint == null) {
+            throw new NullPointerException("Null endpoint passed.");
+        }
     }
-
+    
     public void process(Exchange exchange) throws Exception {
-        String body = exchange.getIn().getBody(String.class);
-        //TODO: fixxx w HISE required
-        Document bodyToSend = getEndpoint().getCamelContext().getTypeConverter().convertTo(Document.class, "<wrap>"+body+"</wrap>");
+        
+        String body = exchange.getIn().getBody(String.class);        
+        Document bodyToSend = getEndpoint().getCamelContext().getTypeConverter().convertTo(Document.class, body);
 
-        TTaskInterface def = hiseEndpoint.getDefinition().getTaskInterface();
+        TTaskInterface def = getHiseEndpoint().getDefinition().getTaskInterface();
 
         //TODO!
         Node createdBy = getEndpoint().getCamelContext().getTypeConverter().convertTo(Node.class, "<empty/>");
-        logger.debug("Sending "+body+" to hise with wrap: "+bodyToSend+"task: "+hiseEndpoint.getDefinition().getTaskName());
-        Node response =
-                hiseEndpoint.getHiseEngine().receive(hiseEndpoint, def.getPortType(), def.getOperation(), bodyToSend.getDocumentElement(), createdBy);
+
+        logger.debug("Sending "+body+" to hise with wrap: "+bodyToSend+"task: "+getHiseEndpoint().getDefinition().getTaskName());
+        
+        Node response = getHiseEndpoint().getHiseEngine().receive(getHiseEndpoint(), def.getPortType(), def.getOperation(), bodyToSend.getDocumentElement(), createdBy);
         exchange.getOut().setBody(response);
+    }
+    
+    private HiseEndpoint getHiseEndpoint() {
+        return (HiseEndpoint) super.getEndpoint();
     }
 }
