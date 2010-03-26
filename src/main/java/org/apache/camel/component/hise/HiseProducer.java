@@ -50,14 +50,14 @@ public class HiseProducer extends DefaultProducer {
     
     public void process(Exchange exchange) throws Exception {
         
-        String body = exchange.getIn().getBody(String.class);        
-        Document bodyToSend = getEndpoint().getCamelContext().getTypeConverter().convertTo(Document.class, body);
-
+        String body = exchange.getIn().getBody(String.class);
+        
+        //TODO: fixxx w HISE required
+        Document bodyToSend = getEndpoint().getCamelContext().getTypeConverter().convertTo(Document.class, "<wrap>" + body + "</wrap>");
         TTaskInterface def = getHiseEndpoint().getDefinition().getTaskInterface();
 
         //TODO!
         Node createdBy = getEndpoint().getCamelContext().getTypeConverter().convertTo(Node.class, "<empty/>");
-
         logger.debug("Sending "+body+" to hise with wrap: "+bodyToSend+"task: "+getHiseEndpoint().getDefinition().getTaskName());
         
         Node response = getHiseEndpoint().getHiseEngine().receive(getHiseEndpoint(), def.getPortType(), def.getOperation(), bodyToSend.getDocumentElement(), createdBy);
