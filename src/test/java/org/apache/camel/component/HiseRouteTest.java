@@ -54,8 +54,9 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
 
     String task = "http://www.insurance.example.com/claims/Task1";
 
-    public void registerTask(TaskInfo taskInfo) {
+    public QName registerTask(TaskInfo taskInfo) {
         taskRegistered = taskInfo.taskDefinition.getTaskName();
+        return taskRegistered;
     }
 
     public Node receive(Handler handler, QName qName, String s, Element element, Node node) {
@@ -102,6 +103,10 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
         fh.expectedMessageCount(1);
         fh.assertIsSatisfied();
         
+    }
+
+    public void removeTask(QName taks) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
