@@ -20,6 +20,7 @@
 package org.apache.camel.component.hise;
 
 import org.apache.camel.Endpoint;
+import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
 import org.apache.camel.impl.DefaultExchange;
@@ -38,15 +39,30 @@ public class HiseConsumer extends DefaultConsumer {
     }
 
     Node consume(Node content, Node epr) {
-        try {
             DefaultExchange ex = new DefaultExchange(getEndpoint().getCamelContext());
             ex.getIn().setBody(content);
-            getProcessor().process(ex);
+            try {
+
+                getProcessor().process(ex);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+            if (ex.isFailed()) {
+                handleFailedExchange(ex);
+            }
+
             return ex.getOut().getBody(Node.class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+
     }
+
+    private void handleFailedExchange(Exchange ex) {
+        Exception exception = ex.getException();
+        if (ex != null) {
+            throw exception instanceof RuntimeException ? (RuntimeException) exception : new RuntimeException(exception);
+        }
+        throw new RuntimeException(ex.getOut().getBody(String.class));
+    }
+
 
 
 }

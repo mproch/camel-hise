@@ -23,20 +23,19 @@ import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.hise.api.HISEEngine;
 import org.apache.hise.api.Handler;
 import org.apache.hise.api.Sender;
 import org.apache.hise.dao.HISEDao;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.xml.namespace.QName;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by IntelliJ IDEA.
@@ -54,8 +53,9 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
 
     String task = "http://www.insurance.example.com/claims/Task1";
 
-    public void registerTask(TaskInfo taskInfo) {
+    public QName registerTask(TaskInfo taskInfo) {
         taskRegistered = taskInfo.taskDefinition.getTaskName();
+        return taskInfo.taskDefinition.getTaskName();
     }
 
     public Node receive(Handler handler, QName qName, String s, Element element, Node node) {
@@ -104,5 +104,7 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
         
     }
 
-
+    public void removeTask(QName qName) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
