@@ -54,7 +54,7 @@ public class HiseEndpoint extends DefaultEndpoint implements Sender, Handler {
         this.definition = definition;
         this.hiseEngine = hiseEngine;
         registerTask();
-        logger.debug("created endpoint for "+endpointUri);
+        logger.debug("created endpoint for " + endpointUri);
     }
 
     public Producer createProducer() throws Exception {

@@ -55,7 +55,7 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
 
     public QName registerTask(TaskInfo taskInfo) {
         taskRegistered = taskInfo.taskDefinition.getTaskName();
-        return taskInfo.taskDefinition.getTaskName();
+        return taskRegistered;
     }
 
     public Node receive(Handler handler, QName qName, String s, Element element, Node node) {
@@ -104,7 +104,9 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
         
     }
 
-    public void removeTask(QName qName) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void removeTask(QName taks) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
 }

@@ -21,6 +21,8 @@ package org.apache.camel.component.hise;
 
 import org.apache.camel.Endpoint;
 import org.apache.camel.impl.DefaultComponent;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.hise.api.HISEEngine;
 import org.apache.hise.engine.store.HumanInteractionsCompiler;
 import org.apache.hise.lang.HumanInteractions;
@@ -37,6 +39,8 @@ import java.util.Map;
  * Time: 9:05:17 PM
  */
 public class HiseComponent extends DefaultComponent {
+    
+    private Log logger = LogFactory.getLog(HiseComponent.class);
 
     private HISEEngine hiseEngine;
 
@@ -44,6 +48,7 @@ public class HiseComponent extends DefaultComponent {
 
     @Override
     protected Endpoint createEndpoint(String s, String s1, Map<String, Object> stringObjectMap) throws Exception {
+        logger.info("Creating endpoint for URL: " + s);
         QName id = new QName(s1.substring(0, s1.lastIndexOf("/")), s1.substring(s1.lastIndexOf("/")+1));
         if (hiseEngine == null) {
             hiseEngine = getCamelContext().getRegistry().lookup("hiseEngine", HISEEngine.class);
