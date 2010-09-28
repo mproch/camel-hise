@@ -42,8 +42,8 @@
   </properties>
 
     <scm>
-      <connection>scm:git:ssh://git@beach.touk.pl:camel-hise</connection>
-      <developerConnection>scm:git:ssh://git@beach.touk.pl:camel-hise</developerConnection>
+      <connection>scm:git:ssh://git@beach.touk.pl/camel-hise</connection>
+      <developerConnection>scm:git:ssh://git@beach.touk.pl/camel-hise</developerConnection>
       <url>git@beach.touk.pl:camel-hise</url>
     </scm>
     
@@ -58,7 +58,7 @@
     <dependency>
       <groupId>org.apache.hise</groupId>
       <artifactId>hise-services</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
+      <version>1.0.0-touk-1</version>
     </dependency>
 
     <!-- testing -->
