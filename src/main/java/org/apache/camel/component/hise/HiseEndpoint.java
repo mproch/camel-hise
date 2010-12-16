@@ -41,6 +41,8 @@ import org.w3c.dom.Node;
  */
 public class HiseEndpoint extends DefaultEndpoint implements Sender, Handler {
 
+    public static final String CREATED_BY_PROPERTY = "CREATED_BY_PROPERTY";
+
     private Log logger = LogFactory.getLog(HiseProducer.class);
 
     private TaskDefinition definition;

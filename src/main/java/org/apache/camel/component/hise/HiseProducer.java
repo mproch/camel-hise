@@ -57,13 +57,18 @@ public class HiseProducer extends DefaultProducer {
         TTaskInterface def = getHiseEndpoint().getDefinition().getTaskInterface();
 
         //TODO!
-        Node createdBy = getEndpoint().getCamelContext().getTypeConverter().convertTo(Node.class, "<empty/>");
+        Node createdBy = getEndpoint().getCamelContext().getTypeConverter().convertTo(Node.class,
+                createCreatedBy(exchange.getProperty(HiseEndpoint.CREATED_BY_PROPERTY, "", String.class)));
         logger.debug("Sending "+body+" to hise with wrap: "+bodyToSend+"task: "+getHiseEndpoint().getDefinition().getTaskName());
         
         Node response = getHiseEndpoint().getHiseEngine().receive(getHiseEndpoint(), def.getPortType(), def.getOperation(), bodyToSend.getDocumentElement(), createdBy);
         exchange.getOut().setBody(response);
     }
-    
+
+    private String createCreatedBy(String createdBy) {
+        return "<header xmlns='http://www.example.org/WS-HT'><initiator>"+createdBy+"</initiator></header>";
+    }
+
     private HiseEndpoint getHiseEndpoint() {
         return (HiseEndpoint) super.getEndpoint();
     }

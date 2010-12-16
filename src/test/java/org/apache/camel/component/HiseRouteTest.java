@@ -20,6 +20,7 @@
 package org.apache.camel.component;
 
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.camel.component.hise.HiseEndpoint;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.impl.DefaultCamelContext;
 import org.apache.camel.impl.SimpleRegistry;
@@ -27,6 +28,7 @@ import org.apache.hise.api.HISEEngine;
 import org.apache.hise.api.Handler;
 import org.apache.hise.api.Sender;
 import org.apache.hise.dao.HISEDao;
+import org.apache.hise.utils.XQueryEvaluator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
@@ -34,6 +36,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.xml.namespace.QName;
+
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -58,10 +62,19 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
         return taskRegistered;
     }
 
-    public Node receive(Handler handler, QName qName, String s, Element element, Node node) {
+    public Node receive(Handler handler, QName qName, String s, Element element, Node createdBy) {
         element.setTextContent("pops");
         sender = (Sender) handler;
+        assertUser(createdBy);
         return element;
+    }
+
+    private void assertUser(Node createdBy) {
+        //copy/paste from hise....
+        XQueryEvaluator e = new XQueryEvaluator();
+        e.declareNamespace("htd", "http://www.example.org/WS-HT");
+        List r = e.evaluateExpression(" xs:string(*/htd:initiator)", createdBy);
+        assertEquals("user", r.get(0).toString());
     }
 
     public HISEDao getHiseDao() {
@@ -90,7 +103,8 @@ public class HiseRouteTest extends RouteBuilder implements HISEEngine {
     public void simpleTest() throws Exception {
         ctx.start();
 
-        ctx.createProducerTemplate().sendBody("direct:toHise","<aaa/>");
+        ctx.createProducerTemplate().sendBodyAndProperty("direct:toHise", "<aaa/>", HiseEndpoint.CREATED_BY_PROPERTY, "user");
+
         assertEquals(QName.valueOf("{http://www.insurance.example.com/claims}Task1"), taskRegistered);
         MockEndpoint ha = ctx.getEndpoint("mock:hiseAnswer", MockEndpoint.class);
         ha.expectedMessageCount(1);
