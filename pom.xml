@@ -98,9 +98,9 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <excludes>
+          <!--excludes>
             <exclude>**/HiseRouteTest.*</exclude>
-          </excludes>
+          </excludes-->
         </configuration>
       </plugin>
       <!-- zalozenie jest takie, ze w koncu to gdzies wyjdzie na apache'a - wiec
